@@ -1,0 +1,387 @@
+---
+title: "Quiz 01"
+output: html_notebook
+---
+
+# Instructions
+
+The goal of this quiz is to help me understand what you have learned thus far in our time together. As with all other tasks in this course, I am going to treat you like programmers, with a few caveats. To complete the tasks in this exam, you may use the following:
+
+  - Any/all class lecture notes, labs, cheat sheets from RStudio, etc.
+  - Any assigned reading/video.
+  - Google (If you are really desperate, Bing.)
+  - Stack Overflow
+
+However, I must require you to complete your own exam. You may not help anyone else in this class and you may not accept help from anyone else in the class. If you have any questions, please ask me. Any clarifications I make will be announced to the entire class. 
+
+This is a do-at-home quiz. The layout/structure of the quiz is identical to the labs you have completed. There is no separate lab this week, so that should help. Complete the tasks below and answer the associated questions in Canvas. This quiz focuses on single table data transformations and plotting. Relational data will make an appearance on Quiz 02.
+
+# SETUP
+
+Remember, you must load your packages (`tidyverse`, etc.) and data for EACH session in R. Just because you had the `tidyverse` loaded last time means nothing for the current session. A new session is started each time you log into RStudio Cloud.
+
+```{r}
+rm(list = ls())
+library(knitr)
+library(tidyverse)
+
+## Makes large/small numbers more human-friendly.
+options(scipen = 999)
+
+
+Appointments <- read_csv("./data/Appointments.csv")
+Appointments
+```
+
+# Appointments
+
+A no-show appointment occurs when a patient makes an appointment with
+their doctor, receives all of the instructions, and does not come to
+their appointment. Understanding the likelihood of a patient skipping
+their appointment is helpful for providers and their staff.
+
+Although this data set is specific to Brazil and is taken from Kaggle,
+this is a very real problem we work on here in the Capital District.
+With that said, this data is specific to the context from which it was
+collected. Do not assume the patterns seen in this data are necessarily
+true here. Context matters.
+
+<https://www.kaggle.com/joniarroba/noshowappointments>
+
+**Grain:** Each row of data is a *single appointment*. A patient may
+have more than one appointment. (Many do.)
+
+## Data Dictionary
+
+  - PatientId: Unique identifier for that patient.
+  - AppointmentID: Unique identifier for each appointment
+  - Gender: Male (M) or Female (F).
+  - AppointmentDate: The Date (YYYY-MM-DD) of the appointment
+  - AppointmentDay: An abbreviation of the name of the day of the
+    appointment (Mon, Tue, etc.)
+  - AppointmentMonth: The abbreviation of the name of the month of the
+    appointment.
+  - Age: Patient age, on the day of the appointment, in years.
+  - Neighbourhood: Where the appointment takes place.
+  - Scholarship: TRUE or FALSE
+      - For more detail:
+        <https://en.wikipedia.org/wiki/Bolsa_Fam%C3%ADlia>
+  - Hipertension: Does the patient have hypertension? TRUE or FALSE
+      - Note the unusual spelling of this column.
+  - Diabetes: Does the patient have diabetes? TRUE or FALSE
+  - Alcoholism: Does the patient have diabetes? TRUE or FALSE
+  - Handcap: Does the patient have a handicap? TRUE or FALSE
+      - Note the unusual spelling of this column.
+      - Not my typo.
+  - ReceivedSMS: Did the patient receive a SMS? TRUE or FALSE
+  - NoShow: Did the patient no-show? TRUE or FALSE
+      - **Hint:** R treats Boolean TRUE values as equal to 1 and FALSE
+        values as equal to 0. You can sum a column of TRUE/FALSE values
+        to get the count of TRUE.
+
+## Something useful:
+
+![](https://imgs.xkcd.com/comics/integration_by_parts.png)
+
+- Remember, use a SINGLE EQUALS SIGN for assignment when you are in a function.
+- Use DOUBLE EQUAL SIGNS for boolean tests (in filter).
+- Use `<-` to assign the final results to a new table for reuse later.
+
+
+
+# Tasks
+
+
+## Task 01: How Many No-Shows?
+
+- How many appointments were recorded as a no-show?
+- You may notice that NoShow is a TRUE/FALSE column, a Boolean.
+    - R handles these values in a special way.
+    - TRUE == 1
+    - FALSE == 0
+    - So, if you `sum()` a column of TRUE/FALSE values the end result is the count of rows equal to TRUE.
+    - Today, this is smashingly convenient.
+- When you create a new column via summarize, give it a name.
+    - Call it a best practice. Doesn't change your answer, but it could change your life.
+    - It looks nicer AND it can save you some pain/effort later.
+    - In this case,  calling the `sum()` `N` seems appropriate.
+    - I mean, it's just a thought. Do what you want.
+
+```{r}
+
+## Boolean columns can be summed (added) to count the number of trues.
+Appointments %>%
+  summarize(SumNoShow = sum(NoShow))
+```
+
+
+## Task 02: No-Shows by Neighbourhood?
+
+- Which neighbourhood had the most no-shows?
+    - **Hint:** Spelling matters. 👀
+- You can use your code from Task 01 to help you.
+- Did you rename your sum() or do you have a column that looks like `sum(foo)` in Task 01?
+- The next couple of tasks depend on the data frame formed by this task.
+    - Create a  new table called . . . . whatever you want and reuse this new data for tasks 03 and 04.
+    - Remember, in order to see you results, you have to print the new table into the notebook.
+    - If you called your new table `foo` then make sure `foo` is on the last line of your notebook and that will print it into the notebook for you to see.
+
+```{r}
+## So, I literally called my new table foo.
+## While acceptable it isn't actually the best choice because it isn't descriptive.
+foo <-
+  Appointments %>%
+  group_by(Neighbourhood) %>%
+  summarize(SumNoShow = sum(NoShow)) %>%
+  arrange(desc(SumNoShow))
+foo
+```
+
+
+Task 03: Plot No-Shows by Neighbourhood
+
+- Reuse the table you created in task 02.
+- Plot No-Shows by neighborhood and upload the graph to Canvas.
+- This should be a bar plot.
+    - Remember, `geom_col` is your friend here.
+        - `r ?geom_col` to read function documentation and look at examples.
+    - I suggest you make Neighbourhood your y-axis aesthetic.
+    - When you maximize the size of the plot, it is legible.
+    - If you don't . . . . . yeah. It won't be.
+
+```{r}
+## This looks kinda crappy below, but if you open it in a separate window, it is 
+## actually quite legible.
+ggplot(foo, aes(x = SumNoShow, y = Neighbourhood)) + geom_col()
+```
+
+
+## Task 04: 822145925426128
+
+  - How many appointments did patient 822145925426128 (`PatientID`) have?
+  - How many no-shows did 822145925426128 have?
+  - You can do this in a single code chunk or two. I don't care.
+
+```{r}
+## I did this in one code block, but you could have done it in two.
+Appointments %>%
+  filter(PatientID == 822145925426128) %>%
+  summarize(N = n(), SumNoShow = sum(NoShow))
+```
+Let's be honest, this patient has a good attendance record. If I had done it in two, it would have looked looked like this.
+
+```{r}
+## This would answer the first part of the task.
+Appointments %>%
+  filter(PatientID == 822145925426128) %>%
+  summarize(N = n())
+```
+
+```{r}
+## And this would answer the second part of the task.
+Appointments %>%
+  filter(PatientID == 822145925426128) %>%
+  summarize(SumNoShow = sum(NoShow))
+```
+
+It is the same answer. Doing it on once code block is more efficient, but no more right/wrong.
+
+
+## Task 05: No-Shows For Patients Over 50
+
+- How many no-shows were recorded by patients over the age of 50?
+
+```{r}
+Appointments %>%
+  filter(Age > 50) %>%
+  summarize(SumNoShow = sum(NoShow))
+```
+
+
+## Task 06: Average Age NoShow
+
+- What is the average age of a no-show patient (`mean()`)?
+- What is the standard deviation of the age of a no-show patient (`sd()`)?
+- You can complete this task with a single code chunk, but if you use
+    two and get the right answers, you will get full credit.
+
+```{r}
+## Because the filter command looks for TRUE, I don't have to really do a 
+## Boolean test here. See the next code chunk.
+Appointments %>%
+  filter(NoShow) %>%
+  summarize(AvgAge = mean(Age), SdAge = sd(Age))
+```
+
+
+```{r}
+## This gets us the same answer. Both are acceptable.
+Appointments %>%
+  filter(NoShow == TRUE) %>%
+  summarize(AvgAge = mean(Age), SdAge = sd(Age))
+```
+
+
+## Task 07: ReceivedSMS
+
+  - One popular intervention for no-shows is to call patients before
+    their appointment, to remind them of their upcoming appointment.
+  - In `Appointments` we have a column called `ReceivedSMS`. Where
+    `TRUE`, these patients received a text message reminding them of
+    their upcoming appointment.
+  - Who had a higher no-show rate?
+      - ReceivedSMS == TRUE
+      - ReceivedSMS == FALSE
+  - To answer this question, you will need to group by `ReceivedSMS` and
+    then calculate the rate of no-shows for each group. This is similar
+    to something we did in a recent lab.
+  - Remember, you can name the columns in `summarize()`.
+      - You will need two columns. And PLEASE NAME THEM to make them usable later.
+      - One column for the total number of No Shows.
+      - One column for the total number of Appointments.
+  - Use `mutate()` to create a new column for the rate of No Shows.
+
+```{r}
+## This one _is_ harder that earlier questions.
+## But, I also gave you quite a bit of guidance.
+Appointments %>%
+  group_by(ReceivedSMS) %>%
+  summarize(SumNoShow = sum(NoShow), Total = n()) %>%
+  mutate(Percent = SumNoShow/Total*100)
+```
+
+Do these results surprise you? They might. Try to think of one or two reasons why this could be true.
+
+In terms of why this could be true, I intend to grade this kindly. If you didn't answer the question, you won't get any credit. If you tell me it involves aliens, I probably won't give you any credit. But there are lots of reasons why this could be true. I would say the most probably reason is that the staff are more likely to leave a SMS message for patients they believe are at risk for not showing up to their appointments. But I've seen lots of creative ideas over the years and most have gotten at least partial credit.
+
+
+## Task 08: Chronic Conditions
+
+First Step:
+
+- Create a new table, called `NoShowRateHyper` which compares the no-show rate of patients with/without hypertension (Look for the column called `Hipertension`).
+- Create a new table, called `NoShowRateDiab` which compares the no-show  rate of patients with/without diabetes.
+- In both tables, calculate the No Show rate as No Shows per 1,000 appointments.
+
+Second Step:
+
+- For each of our new data sets, create a bar plot (`geom_col()`) comparing the rate of no-shows per 1,000 appointments.
+    - In other words, you need one plot for `NoShowRateHyper` and one for `NoShowRateDiab`.
+- Please upload the diabetes plot.
+
+Third Step:
+
+- Compared to the rest of the population, how would you describe the no-show rate of patients with these chronic conditions?
+    - Higher no-show rate
+    - Lower no-show rate
+    - Similar no-show rate
+
+First Step:
+
+```{r}
+NoShowRateHyper <-
+  Appointments %>%
+  group_by(Hipertension) %>%
+  summarize(SumNoShow = sum(NoShow), Total = n()) %>%
+  mutate(Rate = SumNoShow/Total*1000)
+NoShowRateHyper
+
+NoShowRateDiab <-
+  Appointments %>%
+  group_by(Diabetes) %>%
+  summarize(SumNoShow = sum(NoShow), Total = n()) %>%
+  mutate(Rate = SumNoShow/Total*1000)
+NoShowRateDiab
+```
+
+Second Step:
+
+```{r}
+ggplot(NoShowRateHyper, aes(x = Hipertension, y = Rate)) + geom_col()
+
+
+ggplot(NoShowRateDiab, aes(x = Diabetes, y = Rate)) + geom_col()
+```
+
+Third Step:
+
+Based on these results, it would seem that patients with chronic conditions such as diabetes and hyptension have a LOWER rate of No Shows.
+
+
+## Task 09: Distribution of No-Shows
+
+  - Create a new table, called `NoShowCounts`.
+  - The `Appointments` table is at the appointment grain.
+  - This new table, `NoShowCounts`, should be at the patient grain. This
+    means each row in `NoShowCounts` should be a single patient and no
+    patient should duplicate.
+  - Create a histogram showing the distribution of no-show appointments.
+      - Upload your histogram of no-shows.
+  - How many distinct patients are in your `NoShowCounts` table?
+      - If you made your table right, this should be the number of rows
+        in your `NoShowCounts` table.
+  - How would you describe the distribution of no-shows?
+      - Normally distributed
+      - Skewed
+
+```{r}
+## The basic table.
+NoShowCounts <- 
+  Appointments %>%
+  group_by(PatientID) %>%
+  summarize(SumNoShow = sum(NoShow))
+NoShowCounts
+```
+
+Now . . . the second part.
+
+```{r}
+## How many rows are in NoShowCounts?
+NoShowCounts %>% summarize(N = n())
+
+## How many distinct patients in Appointments?
+Appointments %>% select(PatientID) %>% distinct() %>% summarize(N = n())
+
+## FORTUNATELY, I am getting 62299 in both! One last check.
+
+## How many distinct patients do I have in NoShowCounts?
+NoShowCounts %>% select(PatientID) %>% distinct() %>% summarize(N = n())
+
+##Again, I get 62299, so I think I'm good.
+```
+
+
+## Task 10: New Column Over50
+
+  - Create a column which identifies patients who are over 50 years old.
+  - Call this new column `Over50`. (Use `mutate()`)
+  - This column should contain TRUE/FALSE values for each appointment.
+    In other words, this new column goes into the `Appointments` table,
+    not a new table.
+  - How would you describe the no-show rate of patients over 50 compared
+    to other patients?
+      - Higher
+      - Lower
+      - About the same
+  - Once you have created your new column, this is very similar to Task
+    7.  
+
+```{r}
+Appointments <- 
+  Appointments %>%
+  mutate(Over50 = Age > 50)
+
+## To make it easier to see the relevant info, I'm using select to filter out 
+## unwanted columns from what we see in the notebook.
+Appointments %>% select(AppointmentID, PatientID, Age, Over50)
+```
+
+
+
+# Good Luck!
+
+I'll leave you with a little humor.
+
+```{r}
+knitr::include_graphics("https://imgs.xkcd.com/comics/convincing.png")
+```
