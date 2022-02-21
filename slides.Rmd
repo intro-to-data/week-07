@@ -1,33 +1,16 @@
 ---
-title: "Let's recap"
-output: 
-  html_notebook:
-    toc: true
-    toc_float:
-      toc_collapsed: true
-    toc_depth: 3
-    number_sections: true
-    theme: cerule
+title: "Beyond The Numbers"
+subtitle: "Bias"
+author: "Andy Choens"
+output:
+    ioslides_presentation:
+        widescreen: TRUE
+        smaller: TRUE
 ---
 
 
-# Agenda
 
-- Recap: Questions about recent labs or the quiz?
-    - I am going to grade the quiz this weekend.
-    - Example answers to the quiz are in this project. The file is called quiz-answers.Rmd.
-    - Then I will work on your labs. Most of it is automated.
-    - I need to have mid-term grades submitted to the school by the 19th.
-    - I hope the schedule of the quiz avoided time conflicts with your other classes.
-    - Many of you were working on it at 10:30 on Monday night . . . . 
-- What have we learned thus far?
-- Reproducibility
-- Let's talk about data, in the abstract.
-    - This is going to really really stink if you don't talk to me.
-
-
-
-# What have we learned thus far?
+## What have we learned thus far?
 
 - Data science is hard.
 - Data is not always easy to work with.
@@ -36,101 +19,49 @@ output:
     - We can combine it in new ways.
 - We've done some data import, although I glossed over the details.
 - We have done a lot of data transformation and some data visualization.
-- The segue to modeling begins.
 
 ```{r}
 knitr::include_graphics("https://d33wubrfki0l68.cloudfront.net/571b056757d68e6df81a3e3853f54d3c76ad6efc/32d37/diagrams/data-science.png")
 ```
-But first, let's talk about data. Because, well, that's what we are going to do.
 
-
-
-# Data
-
-- In our time together we have studied the cost of diamonds and the mileage of cars.
-- We calculated averages, and we transformed the data.
-- Have you ever thought about the morality of the collecting, sharing, and using data?
-- Have you ever considered data science as an ethical minefield?
-
-
-## Collection
-
-- Collecting data is not a modern idea.
-    - Military history is full of examples of how intelligence enabled numerically smaller units to defeat or delay the advances of larger units.
-    - Governments have kept records since the dawn of history.
-        - 4,000 years ago, the Babylonians took the first known census, to figure out how much food they needed.
-        - 2,500 years ago, the Egyptians used censuses to work out their labor pool for building pyramids.
-        - 2,500 years ago, the Romans used censuses to calculate tax revenues.
-        - 2,000 years ago, the Han Chinese were able to take a census that is still considered reasonably accurate today. (The others above, less so.)
-    - Schools, governments, large corporations, all have created enormous amounts of data.
-    - But nothing in history compares to what we are doing today. Nothing.
-- What companies, institutions, and groups are generating and storing data about you?
-- How do you feel about this?
-- You know the school is going to collect information about your grades, payments, etc.
-    - Should the school track your location on campus to figure out if you are attending class?
-    - Should the state collect information about where you are and who you came into contact with to stop Covid-19 outbreaks?
-- Should your doctor and your insurance company compare notes on what they think your risks are?
-- Should your doctor work with external providers to leverage their EMR to succeed in Value Based Payment plans or to comply with Federal HEDIS (quality) measures?
-- Should companies like Google peer into your email (which they provide for free) in order to deliver targeted ads to your eyeballs?
-- These questions aren't a math equation. There is no single right or wrong answer.
-
-When is it OK to collect data? When is it not OK?
-
-- If I want to collect data from you for a research project here at school, I have to go through an IRB.
-- If I want to collect data from you for class purposes, I can do more or less what I want to do.
-- There are few rules about what companies can collect on you. And there are few rules about how a company should then use/share that data.
-    - Health care/mental health are an unusual exception to this lack of rules.
-    - The definition of health care data is intentionally narrow.
-- Full disclosure: I do not participate in very many corporate perks programs. 
-    - When they offer them to me, I politely decline.
-    - If they ask why, I smile and tell them that I'm the kind of nerd their employer hires to snoop on people and that I'm not OK with it.
 
 
 ## Bias
 
-- Humans are biased.
-    - You are biased.
-    - I am biased.
-- We are all collecting data.
-- Therefore, data is biased.
-
-Don't believe me?
-
-- How should we decide where to deploy police officers?
-    - Many police departments now justify the distribution of their police using historical arrest records.
-    - https://www.brennancenter.org/our-work/research-reports/predictive-policing-explained
+- Biased data leads to biased analysis. And you can't fix this with a bootstrap.
+- How should we decide where to deploy police officers? Historical records?
+    - [Predictive Policing Explained](https://www.brennancenter.org/our-work/research-reports/predictive-policing-explained)
+    - [City of Albany Crime Data Map](https://data.albanyny.gov/Public-Safety/City-of-Albany-Crime-Data-Map-Feb-Apr-2020-/)
+- How can we prevent Crime?
+    - Violent Offender Identification Directive (VOID), Albany Crime Analysis Center (ACAC)
+    - See Safer Neighborhoods Through Policing Initiative PDF
 - What type of evidence should used to determine how felons are supervised upon release?
-    - https://www.ojp.gov/pdffiles1/nij/240696.pdf
-    - We will build a random forest model in this class.
+    - [](https://www.ojp.gov/pdffiles1/nij/240696.pdf)
 - What kind of data should we use to determine the length of a sentence?
-    - https://juryanalyst.com/blog/predictive-modeling-and-the-future-of-crime/
-- Should we use school graduation records to decide to to accept into ACPHS, based on how likely we think a prospective student is to graduate?
-    - https://hechingerreport.org/predictive-analytics-boosting-college-graduation-rates-also-invade-privacy-and-reinforce-racial-inequities/
-- Our data is biased. Accept it.
+    - [Predictive Modeling andthe Future of Crime](https://juryanalyst.com/blog/predictive-modeling-and-the-future-of-crime/)
+- Should we use school graduation records to decide to to accept into ACPHS?
+    - [Predictive Analytics Boosting College Graduation Rates Also Invade Privacy and Reinforce Racial Inequities](https://hechingerreport.org/predictive-analytics-boosting-college-graduation-rates-also-invade-privacy-and-reinforce-racial-inequities/)
+- Although physics and chemistry are not perfect, people are more open to changing their minds when new data emerges. (String Theory, Pluto)
 
 
-## The ethics of collecting data
+## Accuracy/Precision
 
-- In a chemistry lab, you can measure the temperature of your sample to some known degree of accuracy.
-- But our rapid Covid tests have a known false-negative rate that can be problematic.
-- And don't get me started on mental health. Diagnosing depression is not like measuring the temperature of a chemical reaction.
+- Diagnosing depression is not like measuring the temperature of a chemical reaction.
     - The PHQ-9 is considered a gold-standard of mental health diagnosis and measurement.
     - Studies seeking to improve outcomes for people suffering from depression often use changes in PHQ-9 scores to assert effectiveness.
-    - https://www.mdcalc.com/phq-9-patient-health-questionnaire-9
+    - [PHQ-9 Patient Health Questionnaire](https://www.mdcalc.com/phq-9-patient-health-questionnaire-9)
 - In healthcare, social work, economics, government, and just plain studying of people, we often cannot peg objective reality.
     - I am NOT suggesting we should not study these things.
     - I am suggesting we should not treat these subjects as the mathematical equivalent of Boyle's Law.
-    - https://blogs.scientificamerican.com/voices/taking-the-bias-out-of-pain-diagnosis/
+    - [Taking the Bias Out of Pain Diagnosis](https://blogs.scientificamerican.com/voices/taking-the-bias-out-of-pain-diagnosis/)
 - Who should we study/collect data on?
-    - College students? (So much psychology)
-    - Medicaid recipients? (So much everything)
+    - College students? (Hello, psychology)
+    - Medicaid recipients? (Hello, NYS)
     - Nuns? (The Nun Study is a longitudinal study of 678 Catholic sisters 75 to 107 years of age who are members of the School Sisters of Notre Dame congregation.)
     - Members of the military?
 
 
-## Unintended consequences
-
-### Pneumonia
+## Unintended consequences - Pneumonia
 
 - CMS, the Centers for Medicaid and Medicare Services rate hospitals on a number of quality measures.
 - One of these is 30 day mortality for pneumonia. 
@@ -139,15 +70,15 @@ Don't believe me?
     - Patient must be 65 or older.
     - Discharged from non-federal acute care hospitals or VA hospitals.
     - Had to be alive on the day of discharge. (I'm not kidding, that's part of the spec.)
-    - https://www.cms.gov/Medicare/Quality-Initiatives-Patient-Assessment-Instruments/HospitalQualityInits/OutcomeMeasures
-    - https://www.cms.gov/Medicare/Quality-Initiatives-Patient-Assessment-Instruments/HospitalQualityInits/Mortality_AMI-HF-PN_Measures_Updates_Report_FINAL_06-13-2013.pdf
+    - [CMS Hospital Outcome Measures](https://www.cms.gov/Medicare/Quality-Initiatives-Patient-Assessment-Instruments/HospitalQualityInits/OutcomeMeasures)
+    - [Mortality AMI-HF-PN Measures Updates Report FINAL 06-13-2013 (PDF)](https://www.cms.gov/Medicare/Quality-Initiatives-Patient-Assessment-Instruments/HospitalQualityInits/Mortality_AMI-HF-PN_Measures_Updates_Report_FINAL_06-13-2013.pdf)
 - There is some evidence that high performance may correlate with certain coding patterns.
     - Aspiration pneumonia is excluded from the CMS measure. https://www.healthline.com/health/aspiration-pneumonia
     - One study suggests hospitals that do well on the CMS pneumonia measure are more likely to code for aspiration pneumonia or respiratory failure.
-        - https://www.atsjournals.org/doi/full/10.1513/AnnalsATS.201801-048ED
+        - [Unintended Consequences of Quality-of-Care Measures](https://www.atsjournals.org/doi/full/10.1513/AnnalsATS.201801-048ED)
     - What does this suggest about our quality measures?
 
-### Foster Care
+## Unintended consequences - Foster Care (1/2)
 
 There are federal quality guidelines for the state management of it's foster care program. Let's look at some of these measures. Broadly, child welfare outcomes for children and families focus on *safety, permanency, and well-being*. There are seven broad areas these outcomes cover
 
@@ -159,7 +90,7 @@ There are federal quality guidelines for the state management of it's foster car
 - Outcome 6: Increase placement stability
 - Outcome 7: Reduce placements of young children in group homes or institutions
 
-Let's look at outcome six in greater detail.
+## Unintended consequences - Foster Care (2/2)
 
 - Measure 6.1a: The percentage of children in foster care for less than 12 months who experienced two or fewer placement settings
 - Measure 6.1b: The percentage of children in foster care for at least 12 months but less than 24 months who experienced two or fewer placement settings
