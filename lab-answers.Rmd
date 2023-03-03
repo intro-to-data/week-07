@@ -114,6 +114,7 @@ Helpful Hints:
 
 ```{r}
 ## YOUR CODE HERE!
+
 ```
 
 
@@ -220,7 +221,7 @@ aov(weight ~ species_desc, data = hawks) |> summary()
   - And if R-Squared is high, then we can use the independent variable(s) to predict the dependent variable.
 - Example: Weight ~ Wing Length
 
-- Question: Can we predict the weight of a hawk using only the wing length? Upload your plot to Canvas and tell me the Adjusted R-Squared value.
+- Question: Can we predict the weight of a hawk using only the wing length?
 - Answer:
 
 Hints:
@@ -234,6 +235,13 @@ Hints:
 
 ```{r}
 ## YOUR CODE HERE!
+ggplot(data = hawks, aes(x = wing, y = weight)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+lm_wing <- lm(weight~wing, data = hawks)
+summary(lm_wing)
+
 ```
 
 Our relationship is linear and our residuals are pretty close to normally distributed. 
@@ -242,7 +250,6 @@ Our relationship is linear and our residuals are pretty close to normally distri
 ggplot(hawks |> gather_residuals(lm_wing), aes(x = resid)) +
   geom_density()
 ```
-
 
 
 # Task 05 - Groups
@@ -257,6 +264,12 @@ Helpful Hint:
 
 ```{r}
 ## YOUR CODE HERE!
+ggplot(
+  data = hawks,
+  aes(x = wing, y = weight, color = species)
+  ) +
+  geom_point() +
+  geom_smooth(method = "lm")
 ```
 
 
@@ -265,6 +278,8 @@ Helpful Hint:
 
 ```{r}
 ## YUOR CODE HERE
+lm_wing_species <- lm(weight~wing+species, data = hawks)
+summary(lm_wing_species)
 ```
 
 Now, let's see if we can work out what is happening here.
