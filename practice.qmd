@@ -1,0 +1,234 @@
+---
+title: "Review!"
+format: html
+---
+
+
+
+# Goal
+
+- Review & preparation for the midterm.
+- There is no grade for this "assignment". I will not check it.
+- Answers and example code can be found in practice-answers.qmd.
+- This data, like our survey data, is about college students. But this time we have 100 rows rather than a little more than a dozen.
+- I created hints.md to help you. It is full of hints!
+- From the text:
+    - [Data Import](https://r4ds.hadley.nz/data-import.html)
+    - [Data Visualization](https://r4ds.hadley.nz/data-visualize.html)
+    - [Data Transformation](https://r4ds.hadley.nz/data-transform.html)
+    - [Exploratory Data Analysis](https://r4ds.hadley.nz/EDA.html)
+
+
+
+# Setup
+
+```{r setup, include=FALSE}
+library(janitor)
+library(tidyverse)
+library(Stat2Data)
+
+backpack <- Backpack |> clean_names() |> mutate(year = as.character(year))
+rm(Backpack)
+```
+
+
+
+# Data
+
+**Description:** Backpack weights for a sample of college students
+
+**Format:** A data frame with 100 observations on the following 9 variables.
+
+- backpack_weight: Backpack weight (in pounds)
+- body_weight: Body weight (in pounds) 
+- ratio: backpack_weight/body_weight 
+- back_problems ‘0’=no or ‘1’=yes 
+- major: Code for academic major 
+- year: Year in school 
+- sex: A factor with levels ‘Female’ ‘Male’ 
+- status: Graduate or undergraduate? ‘G’ or ‘U’ 
+- units: Number of credits taken that quarter 
+
+**Details:** A survey of students at California Polytechnic State University (San Luis Obispo) collected data to investigate the question of whether back aches might be due to carrying heavy backpacks.
+
+**Source:**
+
+Imported from the Stat2Data package.
+
+Mintz J., Mintz J., Moore K., and Schuh K., "Oh, My Aching Back! A
+Statistical Analysis of Backpack Weights," Stats: The Magazine for
+Students of Statistics, vol. 32, 2002, pp. 1719.
+
+
+
+# Tasks
+
+
+## Task 01: Average Backpack Weight
+
+- **Question:** What is the average backpack weight in this sample?
+- **Answer:** 
+- Helpful Hints:
+    - Remember that `mean()` must be used inside a `summarize()` function.
+  
+```{r}
+
+## YOUR ANSWER HERE!!!
+
+```
+
+
+## Task 02: Min, Max, SD Backpack Weight
+
+- **Question:** What is the minimum, maximum, and standard deviation of the backpack weight?
+- **Answer:**
+  - Min: 
+  - Max: 
+  - Standard Deviation: 
+- Helpful Hints:
+  - You can name the columns with an equal sign in `summarize()`.
+  - It makes the results easier to read.
+  - The unit should be in pounds (lbs).
+
+```{r}
+
+## YOUR ANSWER HERE!!!
+
+```
+
+
+## Task 03:
+
+- **Question:** Is there a strong positive correlation body weight and the weight of the backpack carried?
+- **Answer:** 
+  
+```{r}
+
+## YOUR ANSWER HERE!!!
+
+```
+
+
+## Task 04: Draw a bar plot of student major:
+
+- **Question:** Using a bar plot of student majors, which is the most common major in the sample?
+- **Answer:** 
+- Helpful Hints:
+    - You don't have to put the major on the X axis. :-)
+  
+```{r}
+
+## YOUR ANSWER HERE!!!
+
+```
+
+
+## Task 05: Do people with back problems carry heavier backpacks?
+
+- **Question:** On average, do people with back problems carry heavier backpacks?
+- **Answer:** 
+- Helpful Hints:
+    - You can group by a number column!
+  
+```{r}
+
+## YOUR ANSWER HERE!!!
+
+```
+
+
+## Task 06: Which is the best predictor of carrying a heavy backpack?
+
+- **Question:** Which factor is a better predictor of carrying a heavy backpack? Student sex or Student status (undergrad vs graduate student)? Use a box plot to answer this question and be prepared to upload both images to support you answer.
+- **Answer:** 
+- Helpful Hints:
+    - The answer is either sex or status.
+  
+```{r}
+
+## YOUR ANSWER HERE!!!
+
+```
+
+```{r}
+
+## YOUR ANSWER HERE!!!
+
+```
+
+
+## Task 07:
+
+- **Question:** On average, who is carrying more coursework (units), undergraduates or graduate students?
+- **Answer:** 
+- Helpful Hints:
+    - You don't need a plot for this one.
+    - Just tell me which group has the higher average amount of coursework.
+  
+```{r}
+
+## YOUR ANSWER HERE!!!
+
+```
+
+
+## Task 08:
+
+- **Question:** What percentage of our sample are undergrads?
+- **Answer:** 
+  
+```{r}
+
+## YOUR ANSWER HERE!!!
+
+```
+
+
+## Task 09: Density of backpack weight
+
+- **Question:** Draw a density plot of backpack weight. Is backpack weight skewed and if yes, is it skewed positively or negatively.
+- **Answer:** 
+  
+```{r}
+
+## YOUR ANSWER HERE!!!
+
+```
+
+
+## Task 10: Box plot of body weight by year in school
+
+- **Question:** Draw box plots of body weight by year in school. Based on this plot, does it appear that students get heavier the longer they stay in school?
+- **Answer:** 
+  
+```{r}
+
+## YOUR ANSWER HERE!!!
+
+```
+
+
+## Task 11: Percentage female biology majors
+
+- **Question:** What percentage of Biology majors are Female?
+- **Answer:** 
+- Helpful Hints:
+  - This time you really do have to calculate the percentage!!!
+  
+```{r}
+
+## YOUR ANSWER HERE!!!
+
+```
+
+
+## Task 12: Percentage back problems by sex
+
+- **Question:** Which sex has the highest percentage of back problems?
+- **Answer:** 
+  
+```{r}
+
+## YOUR ANSWER HERE!!!
+
+```

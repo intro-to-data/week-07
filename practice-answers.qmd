@@ -1,0 +1,263 @@
+---
+title: "Review!"
+format: html
+---
+
+
+
+# Setup
+
+```{r setup, include=FALSE}
+library(janitor)
+library(tidyverse)
+library(Stat2Data)
+
+backpack <- Backpack |> clean_names() |> mutate(year = as.character(year))
+rm(Backpack)
+```
+
+
+
+# Tasks
+
+
+## Task 01: Average Backpack Weight
+
+- **Question:** What is the average backpack weight in this sample?
+- **Answer:** 11.66
+- Helpful Hints:
+    - Remember that `mean()` must be used inside a `summarize()` function.
+  
+```{r}
+
+backpack |>
+  summarize(avg_weight = mean(backpack_weight))
+
+```
+
+
+## Task 02: Min, Max, SD Backpack Weight
+
+- **Question:** What is the minimum, maximum, and standard deviation of the backpack weight?
+- **Answer:**
+  - Min: 2 lbs
+  - Max: 35 lbs
+  - Standard Deviation: 5.765134 lbs
+- Helpful Hints:
+  - You can name the columns with an equal sign in `summarize()`.
+  - It makes the results easier to read.
+
+```{r}
+
+# Here, I will name the columns.
+backpack |>
+  summarize(
+    min_weight = min(backpack_weight),
+    max_weight = max(backpack_weight),
+    sd_weight = sd(backpack_weight)
+)
+
+# Here, I will not.
+backpack |>
+  summarize(
+    min(backpack_weight),
+    max(backpack_weight),
+    sd(backpack_weight)
+)
+
+# Either way, same answers, but the first example is easier to read.
+
+```
+
+
+## Task 03:
+
+- **Question:** Is there a strong positive correlation body weight and the weight of the backpack carried?
+- **Answer:** The sample size here is small. At a glance, it seems like "maybe". But then look at the line for backpacks weight 10 lbs, a relatively light backpack. You have low body weight people and heavy body weight people with 10 lbs packs. And the heaviest backpack in the sample is worn by someone who weighs less than 200 lbs. So, no. There is not a strong positive correlation, or any other correlation here.
+  
+```{r}
+
+backpack |>
+  ggplot(aes(x = body_weight, y = backpack_weight)) +
+  geom_point()
+
+```
+
+
+## Task 04: Draw a bar plot of student major:
+
+- **Question:** Using a bar plot of student majors, which is the most common major in the sample?
+- **Answer:** Bio
+- Helpful Hints:
+    - You don't have to put the major on the X axis. :-)
+  
+```{r}
+
+backpack |>
+  ggplot(aes(y = major)) +
+  geom_bar()
+
+```
+
+
+## Task 05: Do people with back problems carry heavier backpacks?
+
+- **Question:** On average, do people with back problems carry heavier backpacks?
+- **Answer:** Yes, 12.7 vs 11.2.
+- Helpful Hints:
+    - You can group by a number column!
+  
+```{r}
+
+backpack |>
+  group_by(back_problems) |>
+  summarize(
+    avg_backpack_weight = mean(backpack_weight),
+    sd_backpack_weight = sd(backpack_weight),
+  )
+
+```
+
+But PLEASE note that the average difference in weight is a mere 1.5 pounds. And the difference is NOT statistically significant. So the answer is yes, but it isn't predictive or explanatory, because 1.5 lbs could not possibly make that big of a difference.
+
+```{r}
+# I know we haven't talked about this, but this is how you can run a t-test in R.
+# This defines backpack_weight as a function of back_problems.
+# Pay attention to the fact that the mean in group 0 and mean in group 1 match our previous calculations.
+# And the p-value is .2273, which is greater than .05.
+t.test(backpack_weight~back_problems, data = backpack)
+```
+
+
+## Task 06: Which is the best predictor of carrying a heavy backpack?
+
+- **Question:** Which factor is a better predictor of carrying a heavy backpack? Student sex or Student status (undergrad vs graduate student)? Use a box plot to answer this question and be prepared to upload both images to support you answer.
+- **Answer:** Status. Undergrads carry quite a bit more weight. The box plot of undergraduate vs graduate students do not overlap. While they do for sex. So while men and undergraduates both carry heavier backpacks, the effect size for undergraduates is much larger and therefore being an undergraduate is more predictive than being male.
+- Helpful Hints:
+    - The answer is either sex or status.
+  
+```{r}
+backpack |> ggplot(aes(x = backpack_weight, y = status)) + geom_boxplot()
+```
+
+```{r}
+backpack |> ggplot(aes(x = backpack_weight, y = sex)) + geom_boxplot()
+```
+
+And, this time we _can_ see a statistically significant difference.
+
+```{r}
+t.test(backpack_weight~status, data = backpack)
+```
+
+
+## Task 07:
+
+- **Question:** On average, who is carrying more coursework (units), undergraduates or graduate students?
+- **Answer:** The undergrads in this sample appear to be working harder than the grad students!
+    - Nearly 3x harder!
+- Helpful Hints:
+    - You don't need a plot for this one.
+    - Just tell me which group has the higher average amount of coursework.
+  
+```{r}
+
+backpack |>
+  group_by(status) |>
+  summarize(avg_units = mean(units))
+
+```
+
+
+## Task 08:
+
+- **Question:** What percentage of our sample are undergrads?
+- **Answer:** 97 percent
+  
+```{r}
+
+# Since there are exactly 100 rows in this data, you could technically skip the mutate() step,
+# But the data used on the midterm does NOT have exactly 100 rows, so you will need to know how to do this.
+backpack |>
+  count(status) |>
+  mutate(p = 100*n/sum(n))
+
+```
+
+- This calls into question the utility of using status to predict backpack weight.
+- Our sample of graduate students is obviously poor.
+- Don't go back and change your answer to any previous tasks. I just want you to think about it.
+
+
+## Task 09: Density of backpack weight
+
+- **Question:** Draw a density plot of backpack weight. Is backpack weight skewed and if yes, is it skewed positively or negatively.
+- **Answer:** Yes it is skewed and it is skewed positively.
+  
+```{r}
+
+ggplot(backpack, aes(x = backpack_weight)) + geom_density()
+
+```
+
+
+## Task 10: Box plot of body weight by year in school
+
+- **Question:** Draw box plots of body weight by year in school. Based on this plot, does it appear that students get heavier the longer they stay in school?
+- **Answer:** No. the weight stays almost the same for grades 1 - 3 and although it goes up in years four and five a little, it goes back down in year six by a smidge.
+  
+```{r}
+
+backpack |>
+  ggplot(aes(x = year, y = body_weight)) +
+  geom_boxplot()
+
+```
+
+
+## Task 11: Percentage female biology majors
+
+- **Question:** What percentage of Biology majors are Female?
+- **Answer:** 77.78
+- Helpful Hints:
+  - This time you really do have to calculate the percentage!!!
+  
+```{r}
+
+backpack |>
+    filter(major == "Bio") |>
+    count(sex) |>
+    mutate(p = 100*n/sum(n))
+
+```
+
+
+## Task 12: Percentage back problems by sex
+
+- **Question:** Which sex has the highest percentage of back problems?
+- **Answer:** Women, 43.64%, compared to men, 17.78%.
+  
+```{r}
+
+backpack |>
+  filter(sex == "Female") |>
+  count(back_problems) |>
+  mutate(p = 100*n/sum(n))
+
+backpack |>
+  filter(sex == "Male") |>
+  count(back_problems) |>
+  mutate(p = 100*n/sum(n))
+
+
+## OR!!!!!
+
+# This gets us the same answer, in less work.
+# And it works because back_problems is a 1/0 column.
+# This works for a TRUE/FALSE column in R as well.
+# R treats TRUE as 1 and FALSE as 0! #TheMoreYouKnow!!!
+backpack |>
+  group_by(sex) |>
+  summarize(p_back_problems = 100*mean(back_problems))
+
+```

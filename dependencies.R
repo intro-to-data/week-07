@@ -3,15 +3,9 @@
 p <- c(
   "janitor",
   "knitr",
-  "lubridate",
   "markdown",
-  "modelr",
   "rmarkdown",
-  "shiny",
-  "stringr",
   "tidyverse",
   "Stat2Data"
 )
 install.packages(p)
-
-unlink("lab-answers.Rmd")
